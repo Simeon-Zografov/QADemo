@@ -156,7 +156,6 @@ jobs:
           git checkout -b gh_pages || git checkout gh_pages
           git pull origin gh_pages --rebase
           mkdir -p results-edge
-          mkdir -p allure-results
           cp -r allure-results/* results-edge/
           git add results-edge
           git commit -m "Add report for edge"
@@ -185,7 +184,7 @@ jobs:
       - name: Checkout gh_pages branch
         uses: actions/checkout@v4
         with:
-          repository: Simeon-Zografov/QUBA_WEB
+          repository: Simeon-Zografov/QADemo
           ref: gh_pages
           path: gh_pages
 
