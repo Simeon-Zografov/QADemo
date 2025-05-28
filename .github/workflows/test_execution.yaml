@@ -160,7 +160,7 @@ jobs:
           git add results-edge
           git commit -m "Add report for edge"
           n=0
-          until [ $n -ge 5 ]; do
+          until [ $n -ge 3 ]; do
             git pull origin gh_pages --rebase
             git push origin gh_pages && break
             n=$((n+1))
