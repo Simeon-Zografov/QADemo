@@ -250,9 +250,10 @@ jobs:
           fi
           
       - name: Generate consolidated Allure report
+        working-directory: gh_pages
         run: |
-          ls -la gh_pages/${{ steps.vars.outputs.report_path }}/allure-results
-          allure generate gh_pages/${{ steps.vars.outputs.report_path }}/allure-results --clean -o gh_pages/${{ steps.vars.outputs.report_path }}
+          ls -la ${{ steps.vars.outputs.report_path }}/allure-results
+          allure generate ${{ steps.vars.outputs.report_path }}/allure-results --clean -o ${{ steps.vars.outputs.report_path }}
 
       - name: Save last history
         run: |
