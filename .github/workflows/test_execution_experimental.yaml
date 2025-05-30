@@ -260,6 +260,9 @@ jobs:
 
       - name: Save last history
         run: |
+          if ![ -d gh_pages/${{ steps.vars.outputs.env_name }}/last-history ]; then
+            mkdir -p gh_pages/${{ steps.vars.outputs.env_name }}/last-history
+          fi
           cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history/* gh_pages/${{ steps.vars.outputs.env_name }}/last-history
 
       - name: Create environment-level index.html redirect
