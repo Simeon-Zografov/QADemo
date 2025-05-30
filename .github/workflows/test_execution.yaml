@@ -292,6 +292,8 @@ jobs:
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Tests
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/pytest.ini
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/requirements.txt
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/allure-results
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/results-*
           sudo rm -rf gh_pages/.git
           sudo rm -rf gh_pages/.github
           sudo rm -rf gh_pages/.gitignore
