@@ -272,6 +272,26 @@ jobs:
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Common
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Pages
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Tests
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/pytest.ini
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/requirements.txt
+          sudo rm -rf gh_pages/.git
+          sudo rm -rf gh_pages/.github
+          sudo rm -rf gh_pages/.gitignore
+          sudo rm -rf gh_pages/.idea
+          sudo rm -rf gh_pages/Common
+          sudo rm -rf gh_pages/Pages
+          sudo rm -rf gh_pages/Tests
+          sudo rm -rf gh_pages/pytest.ini
+          sudo rm -rf gh_pages/requirements.txt
+          sudo rm -rf .git
+          sudo rm -rf .github
+          sudo rm -rf .gitignore
+          sudo rm -rf .idea
+          sudo rm -rf Common
+          sudo rm -rf Pages
+          sudo rm -rf Tests
+          sudo rm -rf pytest.ini
+          sudo rm -rf requirements.txt
           echo "Contents of gh_pages after cleanup:"
           ls -la
           ls -la gh_pages
