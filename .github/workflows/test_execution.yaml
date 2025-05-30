@@ -280,6 +280,10 @@ jobs:
           sudo rm -rf allure-history/Tests
           sudo rm -rf allure-history/pytest.ini
           sudo rm -rf allure-history/requirements.txt
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.git
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.github
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.gitignore
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.idea
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.git
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.github
           sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.gitignore
