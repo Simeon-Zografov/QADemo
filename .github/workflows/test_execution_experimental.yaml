@@ -251,15 +251,12 @@ jobs:
           
       - name: Generate consolidated Allure report
         run: |
-          echo "Current working directory:"
-          pwd
-          ls -la
-      
-          echo "Verifying report directory:"
           ls -la gh_pages/${{ steps.vars.outputs.report_path }}/allure-results
-      
-          echo "Running Allure generate"
-          allure generate "$(pwd)/gh_pages/${{ steps.vars.outputs.report_path }}/allure-results" --clean -o "$(pwd)/gh_pages/${{ steps.vars.outputs.report_path }}"
+          mkdir -p gh_pages/_tmp-report
+          allure generate gh_pages/${{ steps.vars.outputs.report_path }}/allure-results --clean -o gh_pages/_tmp-report
+          rm -rf gh_pages/${{ steps.vars.outputs.report_path }}/* || true
+          mv gh_pages/_tmp-report/* gh_pages/${{ steps.vars.outputs.report_path }}/
+          rm -rf gh_pages/_tmp-report
 
       - name: Save last history
         run: |
