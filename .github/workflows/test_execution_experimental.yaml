@@ -244,6 +244,7 @@ jobs:
       - name: Retrieve existing history
         run: |
           if [ -d gh_pages/${{ steps.vars.outputs.env_name }}/last-history ]; then
+            mkdir -p gh_pages/${{ steps.vars.outputs.report_path }}/allure-results/history
             cp -r gh_pages/${{ steps.vars.outputs.env_name }}/last-history/* gh_pages/${{ steps.vars.outputs.report_path }}/allure-results/history
           else
             echo "No previous history found. Skipping."
