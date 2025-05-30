@@ -244,7 +244,7 @@ jobs:
           sudo rm -rf allure-history/requirements.txt
           echo "Contents of gh_pages after cleanup:"
           ls -la
-          ls -la allure-history
+          ls -la $REPORT_DIR
           ls -la gh_pages
 
       - name: Publish test report
