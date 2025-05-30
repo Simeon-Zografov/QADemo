@@ -229,10 +229,9 @@ jobs:
       - name: Clean up temporary directories
         run: |
           ls -la
-          ls -la ${{ github.event.inputs.environment }}
-          ls -la ${{ github.event.inputs.environment }}/allure-history
           ls -la gh_pages
-          ls -la allure-history
+          ls -la gh_pages/${{ github.event.inputs.environment }}
+          ls -la gh_pages/${{ github.event.inputs.environment }}/allure-history
           echo "Final cleanup of temporary directories"
           sudo rm -rf gh_pages/allure-results
           sudo rm -rf allure-results
@@ -246,10 +245,9 @@ jobs:
           sudo rm -rf allure-history/requirements.txt
           echo "Contents of gh_pages after cleanup:"
           ls -la
-          ls -la ${{ github.event.inputs.environment }}
-          ls -la ${{ github.event.inputs.environment }}/allure-history
           ls -la gh_pages
-          ls -la allure-history
+          ls -la gh_pages/${{ github.event.inputs.environment }}
+          ls -la gh_pages/${{ github.event.inputs.environment }}/allure-history
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v4
