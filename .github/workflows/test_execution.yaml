@@ -265,6 +265,13 @@ jobs:
           sudo rm -rf allure-history/Tests
           sudo rm -rf allure-history/pytest.ini
           sudo rm -rf allure-history/requirements.txt
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.git
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.github
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.gitignore
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.idea
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Common
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Pages
+          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Tests
           echo "Contents of gh_pages after cleanup:"
           ls -la
           ls -la gh_pages
