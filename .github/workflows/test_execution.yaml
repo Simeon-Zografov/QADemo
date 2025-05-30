@@ -247,7 +247,7 @@ jobs:
         uses: simple-elf/allure-report-action@master
         with:
           gh_pages: gh_pages
-          allure_history: gh_pages/${{ github.event.inputs.environment }}/last-history
+          allure_history: gh_pages/${{ github.event.inputs.environment }}
           allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
           keep_reports: 20
 
