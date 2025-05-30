@@ -312,6 +312,14 @@ jobs:
           sudo rm -rf Tests
           sudo rm -rf pytest.ini
           sudo rm -rf requirements.txt
+          CURRENT_ENV="${{ github.event.inputs.environment }}"
+          echo "Current environment: $CURRENT_ENV"
+          for ENV in QA UAT; do
+            if [ "$ENV" != "$CURRENT_ENV" ]; then
+              echo "Removing folder: gh_pages/${{ github.event.inputs.environment }}/$ENV"
+              rm -rf "gh_pages/${{ github.event.inputs.environment }}/$ENV"
+            fi
+          done
           echo "Contents of gh_pages after cleanup:"
           ls -la
           ls -la gh_pages
