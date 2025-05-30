@@ -231,7 +231,6 @@ jobs:
           ls -la
           ls -la gh_pages
           ls -la gh_pages/${{ github.event.inputs.environment }}
-          ls -la gh_pages/${{ github.event.inputs.environment }}/allure-history
           echo "Final cleanup of temporary directories"
           sudo rm -rf gh_pages/allure-results
           sudo rm -rf allure-results
@@ -247,7 +246,6 @@ jobs:
           ls -la
           ls -la gh_pages
           ls -la gh_pages/${{ github.event.inputs.environment }}
-          ls -la gh_pages/${{ github.event.inputs.environment }}/allure-history
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v4
