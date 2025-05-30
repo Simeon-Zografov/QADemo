@@ -208,6 +208,8 @@ jobs:
       - name: Merge individual reports
         run: |
           ls -la gh_pages
+          echo $REPORT_DIR
+          echo $ENV_NAME
           echo "Removing previous allure-results"
           sudo rm -rf allure-results
           sudo rm -rf gh_pages/allure-results
@@ -253,5 +255,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh_pages
           publish_dir: $REPORT_DIR
-          destination_dir: $ENV_NAME
-
