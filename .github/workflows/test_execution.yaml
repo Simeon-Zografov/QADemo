@@ -317,7 +317,7 @@ jobs:
           for ENV in QA UAT; do
             if [ "$ENV" != "$CURRENT_ENV" ]; then
               echo "Removing folder: gh_pages/${{ github.event.inputs.environment }}/$ENV"
-              rm -rf "gh_pages/${{ github.event.inputs.environment }}/$ENV"
+              sudo rm -rf "gh_pages/${{ github.event.inputs.environment }}/$ENV"
             fi
           done
           echo "Contents of gh_pages after cleanup:"
