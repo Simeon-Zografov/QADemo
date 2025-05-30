@@ -251,7 +251,8 @@ jobs:
           
       - name: Generate consolidated Allure report
         run: |
-          allure generate gh_pages/${{ steps.vars.outputs.report_path }}/allure-results/ --clean -o gh_pages/${{ steps.vars.outputs.report_path }}
+          ls -la gh_pages/${{ steps.vars.outputs.report_path }}/allure-results
+          allure generate gh_pages/${{ steps.vars.outputs.report_path }}/allure-results --clean -o gh_pages/${{ steps.vars.outputs.report_path }}
 
       - name: Save last history
         run: |
