@@ -193,9 +193,6 @@ jobs:
     needs: [ chrome-test, edge-test ]
     if: always()
     runs-on: ubuntu-latest
-    env:
-      ENV_NAME: ${{ github.event.inputs.environment }}
-      REPORT_DIR: gh_pages/${{ github.event.inputs.environment }}
 
     steps:
       - name: Checkout gh_pages branch
@@ -208,16 +205,15 @@ jobs:
       - name: Merge individual reports
         run: |
           ls -la gh_pages
-          echo $REPORT_DIR
-          echo $ENV_NAME
+          echo ${{ github.event.inputs.environment }}
           echo "Removing previous allure-results"
           sudo rm -rf allure-results
           sudo rm -rf gh_pages/allure-results
-          mkdir -p $REPORT_DIR/allure-results
+          mkdir -p gh_pages/${{ github.event.inputs.environment }}/allure-results
           for browser_dir in gh_pages/results-*; do
-            cp -r "$browser_dir"/* $REPORT_DIR/allure-results/
+            cp -r "$browser_dir"/* gh_pages/${{ github.event.inputs.environment }}/allure-results/
           done
-          mkdir -p $REPORT_DIR/allure-results/history
+          mkdir -p gh_pages/${{ github.event.inputs.environment }}/allure-results/history
           echo "Cleaning up results directories"
           rm -rf gh_pages/results-*
           ls -la
@@ -227,8 +223,8 @@ jobs:
         if: always()
         with:
           gh_pages: gh_pages
-          allure_history: $REPORT_DIR
-          allure_results: $REPORT_DIR/allure-results
+          allure_history: gh_pages/${{ github.event.inputs.environment }}
+          allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
           keep_reports: 20
 
       - name: Clean up temporary directories
@@ -246,7 +242,7 @@ jobs:
           sudo rm -rf allure-history/requirements.txt
           echo "Contents of gh_pages after cleanup:"
           ls -la
-          ls -la $REPORT_DIR
+          ls -la gh_pages/${{ github.event.inputs.environment }}
           ls -la gh_pages
 
       - name: Publish test report
@@ -254,4 +250,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh_pages
-          publish_dir: $REPORT_DIR
+          publish_dir: gh_pages/${{ github.event.inputs.environment }}
