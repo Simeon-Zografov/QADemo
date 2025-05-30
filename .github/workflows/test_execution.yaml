@@ -195,23 +195,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Create temp workspace
-        run: mkdir gh_pages
-
-      - name: Download existing gh_pages branch
-        run: |
-          git fetch origin gh_pages
-          git worktree add gh_pages origin/gh_pages
-
-#      - name: Checkout gh_pages branch
+#      - name: Checkout code
 #        uses: actions/checkout@v4
-#        with:
-#          repository: Simeon-Zografov/QADemo
-#          ref: gh_pages
-#          path: gh_pages
+#
+#      - name: Create temp workspace
+#        run: mkdir gh_pages
+#
+#      - name: Download existing gh_pages branch
+#        run: |
+#          git fetch origin gh_pages
+#          git worktree add gh_pages origin/gh_pages
+
+      - name: Checkout gh_pages branch
+        uses: actions/checkout@v4
+        with:
+          repository: Simeon-Zografov/QADemo
+          ref: gh_pages
+          path: gh_pages
+
+      - name: Prepare environment-specific folder
+        run: |
+          export ENV_NAME=${{ github.event.inputs.environment }}
+          export TARGET=gh_pages/$ENV_NAME
+          
+          echo "Cleaning previous $ENV_NAME folder..."
+          rm -rf "$TARGET"
+          mkdir -p "$TARGET/allure-results"
+          
+          echo "Copying Allure test result directories..."
+          for dir in gh_pages/results-*; do
+            cp -r "$dir"/* "$TARGET/allure-results/" || true
+          done
+          mkdir -p "$TARGET/allure-results/history"
 
       - name: Merge individual reports
         run: |
@@ -233,8 +248,8 @@ jobs:
         if: always()
         with:
           gh_pages: gh_pages
-          allure_history: gh_pages/${{ github.event.inputs.environment }}
-          allure_results: gh_pages/allure-results
+          allure_history: gh_pages/${{ github.event.inputs.environment }}/last-history
+          allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
           keep_reports: 20
 
       - name: Clean up temporary directories
