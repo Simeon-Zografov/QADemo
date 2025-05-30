@@ -250,10 +250,16 @@ jobs:
           fi
           
       - name: Generate consolidated Allure report
-        working-directory: gh_pages
         run: |
-          ls -la ${{ steps.vars.outputs.report_path }}/allure-results
-          allure generate ${{ steps.vars.outputs.report_path }}/allure-results --clean -o ${{ steps.vars.outputs.report_path }}
+          echo "Current working directory:"
+          pwd
+          ls -la
+      
+          echo "Verifying report directory:"
+          ls -la gh_pages/${{ steps.vars.outputs.report_path }}/allure-results
+      
+          echo "Running Allure generate"
+          allure generate "$(pwd)/gh_pages/${{ steps.vars.outputs.report_path }}/allure-results" --clean -o "$(pwd)/gh_pages/${{ steps.vars.outputs.report_path }}"
 
       - name: Save last history
         run: |
