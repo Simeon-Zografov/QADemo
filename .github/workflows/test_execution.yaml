@@ -228,27 +228,27 @@ jobs:
           done
           mkdir -p "$TARGET/allure-results/history"
 
-      - name: Merge individual reports
-        run: |
-          ls -la gh_pages
-          echo "Removing previous allure-results"
-          sudo rm -rf allure-results
-          sudo rm -rf gh_pages/allure-results
-          mkdir -p gh_pages/allure-results
-          for browser_dir in gh_pages/results-*; do
-            cp -r "$browser_dir"/* gh_pages/allure-results/
-          done
-          mkdir -p gh_pages/allure-results/history
-          echo "Cleaning up results directories"
-          rm -rf gh_pages/results-*
-          ls -la
+#      - name: Merge individual reports
+#        run: |
+#          ls -la gh_pages
+#          echo "Removing previous allure-results"
+#          sudo rm -rf allure-results
+#          sudo rm -rf gh_pages/allure-results
+#          mkdir -p gh_pages/allure-results
+#          for browser_dir in gh_pages/results-*; do
+#            cp -r "$browser_dir"/* gh_pages/allure-results/
+#          done
+#          mkdir -p gh_pages/allure-results/history
+#          echo "Cleaning up results directories"
+#          rm -rf gh_pages/results-*
+#          ls -la
 
       - name: Build test report
         uses: simple-elf/allure-report-action@master
         if: always()
         with:
           gh_pages: gh_pages
-          allure_history: gh_pages/${{ github.event.inputs.environment }}/last-history
+          allure_history: ${{ github.event.inputs.environment }}/allure-history
           allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
           keep_reports: 20
 
@@ -321,4 +321,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh_pages
-          publish_dir: gh_pages
+          publish_dir: ${{ github.event.inputs.environment }}/allure-history
