@@ -24,11 +24,21 @@ on:
           - 'Login'
           - 'Logout'
 
+      environment:
+        description: 'Select environment'
+        required: true
+        default: 'QA'
+        type: choice
+        options:
+          - 'QA'
+          - 'UAT'
+
 jobs:
   chrome-test:
     name: Run Chrome tests
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.chrome == 'true' }}
+    environment: ${{ github.event.inputs.environment }}
     steps:
 
       - name: Set browser variable
@@ -56,6 +66,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           BROWSERS: ${{ env.BROWSERS }}
           USERNAME: ${{ vars.USERNAME }}
+          CUR_ENV: ${{ vars.CUR_ENV }}
 
         run: |
           mkdir -p allure-results
@@ -104,6 +115,7 @@ jobs:
     name: Run Edge tests
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.chrome == 'true' }}
+    environment: ${{ github.event.inputs.environment }}
     steps:
 
       - name: Set browser variable
@@ -131,6 +143,7 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           BROWSERS: ${{ env.BROWSERS }}
           USERNAME: ${{ vars.USERNAME }}
+          CUR_ENV: ${{ vars.CUR_ENV }}
 
         run: |
           mkdir -p allure-results

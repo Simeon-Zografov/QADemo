@@ -18,6 +18,8 @@ class BaseClass:
     username = os.getenv("USERNAME")
     password = os.getenv("PASSWORD")
     url = os.getenv("URL")
+    cur_env = os.getenv("CUR_ENV")
+    print(f"The current env is: {cur_env}")
 
     @pytest.fixture(scope="class", autouse=True)
     def driver(self, request):
