@@ -252,17 +252,17 @@ jobs:
           allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
           keep_reports: 20
 
-      - name: Clean up temporary directories
-        run: |
-          echo "Final cleanup of temporary directories"
-          sudo rm -rf gh_pages/allure-results
-          sudo rm -rf gh_pages/results-*
-          sudo rm -rf allure-history
-
-      - name: Remove any nested .git directories to avoid submodules
-        run: |
-          echo "Cleaning any nested .git directories"
-          find gh_pages -type d -name ".git" | xargs rm -rf
+#      - name: Clean up temporary directories
+#        run: |
+#          echo "Final cleanup of temporary directories"
+#          sudo rm -rf gh_pages/allure-results
+#          sudo rm -rf gh_pages/results-*
+#          sudo rm -rf allure-history
+#
+#      - name: Remove any nested .git directories to avoid submodules
+#        run: |
+#          echo "Cleaning any nested .git directories"
+#          find gh_pages -type d -name ".git" | xargs rm -rf
 
       - name: Clean up temporary directories
         run: |
