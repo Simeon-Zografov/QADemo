@@ -1,4 +1,4 @@
-name: Run Selenium Tests and publish report multiple environments
+name: Run Selenium Tests and publish report single environment
 
 on:
   workflow_dispatch:
@@ -190,21 +190,10 @@ jobs:
 
   aggregate:
     name: Generate report
-    needs: [ chrome-test, edge-test ]
+    needs: [ chrome-test, edge-test, firefox-test, safari-test ]
     if: always()
     runs-on: ubuntu-latest
-
     steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Create temp workspace
-#        run: mkdir gh_pages
-#
-#      - name: Download existing gh_pages branch
-#        run: |
-#          git fetch origin gh_pages
-#          git worktree add gh_pages origin/gh_pages
 
       - name: Checkout gh_pages branch
         uses: actions/checkout@v4
@@ -213,69 +202,32 @@ jobs:
           ref: gh_pages
           path: gh_pages
 
-      - name: Define report folder
-        id: vars
+      - name: Merge individual reports
         run: |
-          export ENV_NAME=${{ github.event.inputs.environment }}
-          export REPORT_ID=${{ github.run_number }}
-          echo "env_name=$ENV_NAME" >> $GITHUB_OUTPUT
-          echo "report_id=$REPORT_ID" >> $GITHUB_OUTPUT
-
-      - name: Prepare environment-specific folder
-        run: |
-          export ENV_NAME=${{ github.event.inputs.environment }}
-          export TARGET=gh_pages/$ENV_NAME
-          
-          echo "Cleaning previous $ENV_NAME folder..."
-          rm -rf "$TARGET"
-          mkdir -p "$TARGET/allure-results"
-          
-          echo "Copying Allure test result directories..."
-          for dir in gh_pages/results-*; do
-            cp -r "$dir"/* "$TARGET/allure-results/" || true
+          ls -la gh_pages
+          echo "Removing previous allure-results"
+          sudo rm -rf allure-results
+          sudo rm -rf gh_pages/allure-results
+          mkdir -p gh_pages/allure-results
+          for browser_dir in gh_pages/results-*; do
+            cp -r "$browser_dir"/* gh_pages/allure-results/
           done
-          mkdir -p "$TARGET/allure-results/history"
+          mkdir -p gh_pages/allure-results/history
+          echo "Cleaning up results directories"
+          rm -rf gh_pages/results-*
+          ls -la
 
-#      - name: Merge individual reports
-#        run: |
-#          ls -la gh_pages
-#          echo "Removing previous allure-results"
-#          sudo rm -rf allure-results
-#          sudo rm -rf gh_pages/allure-results
-#          mkdir -p gh_pages/allure-results
-#          for browser_dir in gh_pages/results-*; do
-#            cp -r "$browser_dir"/* gh_pages/allure-results/
-#          done
-#          mkdir -p gh_pages/allure-results/history
-#          echo "Cleaning up results directories"
-#          rm -rf gh_pages/results-*
-#          ls -la
-
-      - name: Build Allure report
+      - name: Build test report
         uses: simple-elf/allure-report-action@master
+        if: always()
         with:
           gh_pages: gh_pages
-          allure_history: gh_pages/${{ github.event.inputs.environment }}
-          allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
+          allure_history: allure-history
+          allure_results: gh_pages/allure-results
           keep_reports: 20
-
-#      - name: Clean up temporary directories
-#        run: |
-#          echo "Final cleanup of temporary directories"
-#          sudo rm -rf gh_pages/allure-results
-#          sudo rm -rf gh_pages/results-*
-#          sudo rm -rf allure-history
-#
-#      - name: Remove any nested .git directories to avoid submodules
-#        run: |
-#          echo "Cleaning any nested .git directories"
-#          find gh_pages -type d -name ".git" | xargs rm -rf
 
       - name: Clean up temporary directories
         run: |
-          ls -la
-          ls -la gh_pages
-          ls -la gh_pages/${{ github.event.inputs.environment }}
           echo "Final cleanup of temporary directories"
           sudo rm -rf gh_pages/allure-results
           sudo rm -rf allure-results
@@ -287,55 +239,14 @@ jobs:
           sudo rm -rf allure-history/Tests
           sudo rm -rf allure-history/pytest.ini
           sudo rm -rf allure-history/requirements.txt
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.git
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.github
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.gitignore
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/last-history/.idea
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.git
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.github
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.gitignore
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/.idea
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Common
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Pages
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/Tests
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/pytest.ini
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/requirements.txt
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/allure-results
-          sudo rm -rf gh_pages/${{ github.event.inputs.environment }}/results-*
-          sudo rm -rf gh_pages/.git
-          sudo rm -rf gh_pages/.github
-          sudo rm -rf gh_pages/.gitignore
-          sudo rm -rf gh_pages/.idea
-          sudo rm -rf gh_pages/Common
-          sudo rm -rf gh_pages/Pages
-          sudo rm -rf gh_pages/Tests
-          sudo rm -rf gh_pages/pytest.ini
-          sudo rm -rf gh_pages/requirements.txt
-          sudo rm -rf .git
-          sudo rm -rf .github
-          sudo rm -rf .gitignore
-          sudo rm -rf .idea
-          sudo rm -rf Common
-          sudo rm -rf Pages
-          sudo rm -rf Tests
-          sudo rm -rf pytest.ini
-          sudo rm -rf requirements.txt
-          CURRENT_ENV="${{ github.event.inputs.environment }}"
-          echo "Current environment: $CURRENT_ENV"
-          for ENV in QA UAT; do
-            if [ "$ENV" != "$CURRENT_ENV" ]; then
-              echo "Removing folder: gh_pages/${{ github.event.inputs.environment }}/$ENV"
-              sudo rm -rf "gh_pages/${{ github.event.inputs.environment }}/$ENV"
-            fi
-          done
           echo "Contents of gh_pages after cleanup:"
           ls -la
+          ls -la allure-history
           ls -la gh_pages
-          ls -la gh_pages/${{ github.event.inputs.environment }}
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh_pages
-          publish_dir: gh_pages
+          publish_dir: allure-history
