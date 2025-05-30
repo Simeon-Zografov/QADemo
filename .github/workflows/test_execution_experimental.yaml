@@ -1,4 +1,4 @@
-name: Run Selenium Tests and publish report multiple environments
+name: Run Selenium Tests and publish report experimental
 
 on:
   workflow_dispatch:
@@ -206,6 +206,19 @@ jobs:
         run: |
           npm install -g allure-commandline
 
+      - name: Clean up test directories
+        run: |
+          
+          sudo rm -rf gh_pages/.git
+          sudo rm -rf gh_pages/.github
+          sudo rm -rf gh_pages/.gitignore
+          sudo rm -rf gh_pages/.idea
+          sudo rm -rf gh_pages/Common
+          sudo rm -rf gh_pages/Pages
+          sudo rm -rf gh_pages/Tests
+          sudo rm -rf gh_pages/pytest.ini
+          sudo rm -rf gh_pages/requirements.txt
+
       - name: Define report folder
         id: vars
         run: |
@@ -239,3 +252,32 @@ jobs:
       - name: Generate consolidated Allure report
         run: |
           allure generate gh_pages/${{ steps.vars.outputs.report_path }}/allure-results/ --clean -o gh_pages/${{ steps.vars.outputs.report_path }}
+
+      - name: Save last history
+        run: |
+          cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history gh_pages/${{ steps.vars.outputs.env_name }}/last-history
+
+      - name: Create environment-level index.html redirect
+        run: |
+          ENV_NAME=${{ steps.vars.outputs.env_name }}
+          REPORT_ID=${{ steps.vars.outputs.report_id }}
+          INDEX_PATH="gh_pages/$ENV_NAME/index.html"
+      
+          echo "Creating index.html to redirect to latest report: $REPORT_ID"
+          cat > "$INDEX_PATH" <<EOF
+          <!DOCTYPE html>
+          <meta charset="utf-8">
+          <meta http-equiv="refresh" content="0; URL=https://Simeon-Zografov.github.io/QADemo/$ENV_NAME/$REPORT_ID/index.html">
+          <meta http-equiv="Pragma" content="no-cache">
+          <meta http-equiv="Expires" content="0">
+          EOF
+      
+          echo "Generated index.html:"
+          cat "$INDEX_PATH"
+
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh_pages
+          publish_dir: gh_pages
