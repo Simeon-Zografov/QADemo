@@ -205,15 +205,14 @@ jobs:
       - name: Merge individual reports
         run: |
           ls -la gh_pages
-          echo ${{ github.event.inputs.environment }}
           echo "Removing previous allure-results"
           sudo rm -rf allure-results
           sudo rm -rf gh_pages/allure-results
-          mkdir -p gh_pages/${{ github.event.inputs.environment }}/allure-results
+          mkdir -p gh_pages/allure-results
           for browser_dir in gh_pages/results-*; do
-            cp -r "$browser_dir"/* gh_pages/${{ github.event.inputs.environment }}/allure-results/
+            cp -r "$browser_dir"/* gh_pages/allure-results/
           done
-          mkdir -p gh_pages/${{ github.event.inputs.environment }}/allure-results/history
+          mkdir -p gh_pages/allure-results/history
           echo "Cleaning up results directories"
           rm -rf gh_pages/results-*
           ls -la
@@ -224,11 +223,16 @@ jobs:
         with:
           gh_pages: gh_pages
           allure_history: gh_pages/${{ github.event.inputs.environment }}
-          allure_results: gh_pages/${{ github.event.inputs.environment }}/allure-results
+          allure_results: gh_pages/allure-results
           keep_reports: 20
 
       - name: Clean up temporary directories
         run: |
+          ls -la
+          ls -la ${{ github.event.inputs.environment }}
+          ls -la ${{ github.event.inputs.environment }}/allure-history
+          ls -la gh_pages
+          ls -la allure-history
           echo "Final cleanup of temporary directories"
           sudo rm -rf gh_pages/allure-results
           sudo rm -rf allure-results
@@ -242,12 +246,14 @@ jobs:
           sudo rm -rf allure-history/requirements.txt
           echo "Contents of gh_pages after cleanup:"
           ls -la
-          ls -la gh_pages/${{ github.event.inputs.environment }}
+          ls -la ${{ github.event.inputs.environment }}
+          ls -la ${{ github.event.inputs.environment }}/allure-history
           ls -la gh_pages
+          ls -la allure-history
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh_pages
-          publish_dir: gh_pages/${{ github.event.inputs.environment }}
+          publish_dir: gh_pages
