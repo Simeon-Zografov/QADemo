@@ -244,7 +244,7 @@ jobs:
       - name: Retrieve existing history
         run: |
           if [ -d gh_pages/${{ steps.vars.outputs.env_name }}/last-history ]; then
-            cp -r gh_pages/${{ steps.vars.outputs.env_name }}/last-history gh_pages/${{ steps.vars.outputs.report_path }}/allure-results/history
+            cp -r gh_pages/${{ steps.vars.outputs.env_name }}/last-history/* gh_pages/${{ steps.vars.outputs.report_path }}/allure-results/history
           else
             echo "No previous history found. Skipping."
           fi
@@ -260,7 +260,7 @@ jobs:
 
       - name: Save last history
         run: |
-          cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history gh_pages/${{ steps.vars.outputs.env_name }}/last-history
+          cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history/* gh_pages/${{ steps.vars.outputs.env_name }}/last-history
 
       - name: Create environment-level index.html redirect
         run: |
