@@ -195,12 +195,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout gh_pages branch
+      - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          repository: Simeon-Zografov/QADemo
-          ref: gh_pages
-          path: gh_pages
+
+      - name: Create temp workspace
+        run: mkdir gh_pages
+
+      - name: Download existing gh_pages branch
+        run: |
+          git fetch origin gh_pages
+          git worktree add gh_pages origin/gh_pages
+
+#      - name: Checkout gh_pages branch
+#        uses: actions/checkout@v4
+#        with:
+#          repository: Simeon-Zografov/QADemo
+#          ref: gh_pages
+#          path: gh_pages
 
       - name: Merge individual reports
         run: |
@@ -225,6 +236,15 @@ jobs:
           allure_history: gh_pages/${{ github.event.inputs.environment }}
           allure_results: gh_pages/allure-results
           keep_reports: 20
+
+      - name: Final cleanup
+        run: |
+          echo "Removing temporary and leftover files"
+          rm -rf gh_pages/allure-results
+          rm -rf allure-history
+
+      - name: Remove .git from worktree folder before publish
+        run: rm -rf gh_pages/.git
 
       - name: Clean up temporary directories
         run: |
