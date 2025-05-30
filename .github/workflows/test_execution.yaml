@@ -193,6 +193,10 @@ jobs:
     needs: [ chrome-test, edge-test ]
     if: always()
     runs-on: ubuntu-latest
+    env:
+      ENV_NAME: ${{ github.event.inputs.environment }}
+      REPORT_DIR: gh_pages/${{ github.event.inputs.environment }}
+
     steps:
       - name: Checkout gh_pages branch
         uses: actions/checkout@v4
@@ -207,11 +211,11 @@ jobs:
           echo "Removing previous allure-results"
           sudo rm -rf allure-results
           sudo rm -rf gh_pages/allure-results
-          mkdir -p gh_pages/allure-results
+          mkdir -p $REPORT_DIR/allure-results
           for browser_dir in gh_pages/results-*; do
-            cp -r "$browser_dir"/* gh_pages/allure-results/
+            cp -r "$browser_dir"/* $REPORT_DIR/allure-results/
           done
-          mkdir -p gh_pages/allure-results/history
+          mkdir -p $REPORT_DIR/allure-results/history
           echo "Cleaning up results directories"
           rm -rf gh_pages/results-*
           ls -la
@@ -221,8 +225,8 @@ jobs:
         if: always()
         with:
           gh_pages: gh_pages
-          allure_history: allure-history
-          allure_results: gh_pages/allure-results
+          allure_history: $REPORT_DIR
+          allure_results: $REPORT_DIR/allure-results
           keep_reports: 20
 
       - name: Clean up temporary directories
@@ -248,5 +252,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh_pages
-          publish_dir: allure-history
+          publish_dir: $REPORT_DIR
+          destination_dir: $ENV_NAME
 
