@@ -265,7 +265,7 @@ jobs:
           REPORT_ID=${{ steps.vars.outputs.report_id }}
           ENV_NAME=${{ steps.vars.outputs.env_name }}
           REPORT_NAME="${ENV_NAME} #${REPORT_ID}"
-          REPORT_URL="${REPORT_ID}/index.html"
+          REPORT_URL="/${REPO_NAME}/${ENV_NAME}/${REPORT_ID}/index.html"
       
           if [ -f "$FILE" ]; then
             jq --arg name "$REPORT_NAME" \
