@@ -372,7 +372,7 @@ jobs:
             ENV_NAME=$(basename "$ENV_DIR")
             [[ "$ENV_NAME" =~ ^(QA|UAT|DEV|STAGING)$ ]] || continue
       
-            echo "<h2>Environment: $ENV_NAME</h2>
+            echo "<h2>Environment: <a href='${ENV_NAME}/index.html'>$ENV_NAME</a></h2>
             <table>
               <thead><tr><th>Execution</th><th>Date</th><th>Link</th></tr></thead>
               <tbody>" >> "$LANDING_PAGE"
