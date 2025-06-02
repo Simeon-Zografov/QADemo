@@ -114,7 +114,7 @@ jobs:
   edge-test:
     name: Run Edge tests
     runs-on: ubuntu-latest
-    if: ${{ github.event.inputs.chrome == 'true' }}
+    if: ${{ github.event.inputs.edge == 'true' }}
     environment: ${{ github.event.inputs.environment }}
     steps:
 
