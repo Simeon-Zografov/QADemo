@@ -360,10 +360,11 @@ jobs:
               th {
                 background-color: #eaeaea; 
               }
+              .logo { max-width: 200px; margin-bottom: 1rem; }
             </style>
           </head>
           <body>
-            <img src="https://hedgehoglab.com/wp-content/uploads/2023/05/Logos.svg" alt="Company Logo" style="max-width: 200px; margin-bottom: 20px;">
+            <img src="https://hedgehoglab.com/wp-content/uploads/2023/05/Logos.svg" class='logo'>
             <div class="container">
             <h1>Test Report Dashboard</h1>" > "$LANDING_PAGE"
       
