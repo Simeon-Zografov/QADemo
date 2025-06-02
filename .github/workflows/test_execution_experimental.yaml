@@ -264,6 +264,7 @@ jobs:
           FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/history-trend.json"
           REPORT_ID=${{ steps.vars.outputs.report_id }}
           ENV_NAME=${{ steps.vars.outputs.env_name }}
+          REPO_NAME="${{ github.event.repository.name }}"
           REPORT_NAME="${ENV_NAME} #${REPORT_ID}"
           REPORT_URL="/${REPO_NAME}/${ENV_NAME}/${REPORT_ID}/index.html"
       
