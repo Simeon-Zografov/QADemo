@@ -259,6 +259,23 @@ jobs:
           mv gh_pages/_tmp-report/* gh_pages/${{ steps.vars.outputs.report_path }}/
           rm -rf gh_pages/_tmp-report
 
+      - name: Patch history-trend.json with report metadata
+        run: |
+          FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/history-trend.json"
+          REPORT_ID=${{ steps.vars.outputs.report_id }}
+          ENV_NAME=${{ steps.vars.outputs.env_name }}
+          REPORT_NAME="${ENV_NAME} #${REPORT_ID}"
+          REPORT_URL="${REPORT_ID}/index.html"
+      
+          if [ -f "$FILE" ]; then
+            jq --arg name "$REPORT_NAME" \
+               --arg url "$REPORT_URL" \
+               --argjson order "$REPORT_ID" \
+               '.[0] += {reportName: $name, reportUrl: $url, buildOrder: $order}' "$FILE" > tmp.json && mv tmp.json "$FILE"
+          else
+            echo "No history-trend.json found to patch."
+          fi
+
       - name: Save last history
         run: |
           if [ ! -d gh_pages/${{ steps.vars.outputs.env_name }}/last-history ]; then
