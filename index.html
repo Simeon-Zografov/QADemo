@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang=en>
 <head>
-  <meta charset="UTF-8">
+  <meta charset=UTF-8>
   <title>QA Environment Reports</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name=viewport content=width=device-width, initial-scale=1>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -39,22 +39,38 @@
     a:hover {
       text-decoration: underline;
     }
+    table { 
+      border-collapse: collapse; width: 100%; margin-bottom: 2rem; 
+    }
+    th, td { 
+      padding: 0.5rem; border-bottom: 1px solid #ccc; text-align: left; 
+    }
+    th {
+      background-color: #eaeaea; 
+    }
+    .logo { max-width: 200px; margin-bottom: 1rem; }
   </style>
 </head>
 <body>
-  <img src="https://hedgehoglab.com/wp-content/uploads/2023/05/Logos.svg" alt="Company Logo" style="max-width: 200px; margin-bottom: 20px;">
-  <div class="container">
-    <h1>Test Report Dashboard</h1>
-
-    <div class="env">
-      <h2>QA</h2>
-      <a href="/QADemo/QA/index.html">Latest</a><br>
-    </div>
-
-    <div class="env">
-      <h2>UAT</h2>
-      <a href="/QADemo/UAT/index.html">Latest</a><br>
-    </div>
-  </div>
-</body>
-</html>
+  <img src=https://hedgehoglab.com/wp-content/uploads/2023/05/Logos.svg class='logo'>
+  <div class=container>
+  <h1>Test Report Dashboard</h1>
+<h2>Environment: QA</h2>
+  <table>
+    <thead><tr><th>Execution</th><th>Date</th><th>Link</th></tr></thead>
+    <tbody>
+<tr><td>#28</td><td>2025-06-02 07:44:58</td><td><a href='QA/28/index.html'>View Report</a></td></tr>
+<tr><td>#24</td><td>2025-06-02 07:44</td><td><a href='QA/24/index.html'>View Report</a></td></tr>
+<tr><td>#23</td><td>2025-06-02 07:44</td><td><a href='QA/23/index.html'>View Report</a></td></tr>
+<tr><td>#22</td><td>2025-06-02 07:44</td><td><a href='QA/22/index.html'>View Report</a></td></tr>
+<tr><td>#21</td><td>2025-06-02 07:44</td><td><a href='QA/21/index.html'>View Report</a></td></tr>
+<tr><td>#20</td><td>2025-06-02 07:44</td><td><a href='QA/20/index.html'>View Report</a></td></tr>
+</tbody></table>
+<h2>Environment: UAT</h2>
+  <table>
+    <thead><tr><th>Execution</th><th>Date</th><th>Link</th></tr></thead>
+    <tbody>
+<tr><td>#26</td><td>2025-06-02 07:44</td><td><a href='UAT/26/index.html'>View Report</a></td></tr>
+<tr><td>#25</td><td>2025-06-02 07:44</td><td><a href='UAT/25/index.html'>View Report</a></td></tr>
+</tbody></table>
+</body></html>
