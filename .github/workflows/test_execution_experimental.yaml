@@ -228,7 +228,6 @@ jobs:
           echo "report_id=$REPORT_ID" >> $GITHUB_OUTPUT
           echo "report_path=$ENV_NAME/$REPORT_ID" >> $GITHUB_OUTPUT
 
-
       - name: Merge individual reports
         run: |
           ls -la gh_pages
@@ -240,6 +239,56 @@ jobs:
           rm -rf gh_pages/results-*
           ls -la
           ls -la gh_pages/${{ steps.vars.outputs.report_path }}/allure-results
+
+      - name: Clean old reports
+        shell: bash
+        run: |
+          ENV_NAME="${{ steps.vars.outputs.env_name }}"
+          ENV_DIR="gh_pages/${ENV_NAME}"
+          
+          if [ ! -d "$ENV_DIR" ]; then
+            echo "Environment folder does not exist. Skipping cleanup."
+            exit 0
+          fi
+
+          echo "Checking for old reports in: $ENV_DIR"
+          if [ ! -d "$ENV_DIR" ]; then
+            echo "Environment directory does not exist. Skipping cleanup."
+            exit 0
+          fi
+
+          echo "Listing numeric subdirectories:"
+          find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort
+
+          mapfile -t REPORT_FOLDERS < <(find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | grep -E '^[0-9]+$' | sort -n)
+
+          NUM_REPORTS=${#REPORT_FOLDERS[@]}
+          echo "Found $NUM_REPORTS report folders: ${REPORT_FOLDERS[*]}"
+
+          if (( NUM_REPORTS > 5 )); then
+            NUM_TO_DELETE=$((NUM_REPORTS - 5))
+            echo "Need to delete $NUM_TO_DELETE oldest report(s)..."
+
+            for (( i=0; i<$NUM_TO_DELETE; i++ )); do
+              OLD_ID="${REPORT_FOLDERS[$i]}"
+              OLD_DIR="$ENV_DIR/$OLD_ID"
+              echo "Deleting report folder: $OLD_DIR"
+              rm -rf "$OLD_DIR"
+
+              echo "Removing entry from landing page: $OLD_ID"
+              sed -i "/>${OLD_ID}</d" gh_pages/index.html
+            done
+          else
+            echo "Nothing to delete. Only $NUM_REPORTS reports found."
+          fi
+
+          HISTORY_JSON="$ENV_DIR/last-history/history-trend.json"
+          if [ -f "$HISTORY_JSON" ]; then
+            echo "Trimming history-trend.json to 5 entries..."
+            jq 'sort_by(.buildOrder | tonumber) | .[-5:]' "$HISTORY_JSON" > tmp.json && mv tmp.json "$HISTORY_JSON"
+          else
+            echo "No history-trend.json found. Skipping."
+          fi
 
       - name: Retrieve existing history
         run: |
@@ -284,39 +333,7 @@ jobs:
           fi
           cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history/* gh_pages/${{ steps.vars.outputs.env_name }}/last-history
 
-      - name: Clean old reports
-        shell: bash
-        run: |
-          ENV_NAME="${{ steps.vars.outputs.env_name }}"
-          ENV_DIR="gh_pages/${ENV_NAME}"
-          HISTORY_JSON="$ENV_DIR/last-history/history-trend.json"
-          REPORT_FOLDERS=($(find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | grep -E '^[0-9]+$' | sort -n))
-          NUM_REPORTS=${#REPORT_FOLDERS[@]}
-          
-          if (( NUM_REPORTS > 5 )); then
-            NUM_TO_DELETE=$((NUM_REPORTS - 5))
-            echo "Found $NUM_REPORTS reports. Cleaning up $NUM_TO_DELETE oldest..."
-            DELETED_IDS=()
-            for (( i=0; i<$NUM_TO_DELETE; i++ )); do
-              OLD_ID="${REPORT_FOLDERS[$i]}"
-              OLD_DIR="$ENV_DIR/$OLD_ID"
-              echo "Deleting old report: $OLD_DIR"
-              rm -rf "$OLD_DIR"
-              DELETED_IDS+=("$OLD_ID")
-              sed -i "/>$OLD_ID</d" gh_pages/index.html
-            done
-          
-            if [ -f "$HISTORY_JSON" ]; then
-              echo "Filtering history-trend.json to remove deleted buildOrders..."
-              JQ_FILTER=$(printf ' and .buildOrder != %s' "${DELETED_IDS[@]}")
-              JQ_FILTER=${JQ_FILTER:5}  # remove leading ' and '
-              jq "[.[] | select($JQ_FILTER)]" "$HISTORY_JSON" > tmp.json && mv tmp.json "$HISTORY_JSON"
-            else
-              echo "No history-trend.json found. Skipping."
-            fi
-          else
-            echo "Only $NUM_REPORTS reports found. Nothing to delete."
-          fi
+      
 
       - name: Create environment-level index.html redirect
         run: |
