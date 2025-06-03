@@ -300,6 +300,8 @@ jobs:
               echo "Deleting old report: $OLD_DIR"
               rm -rf "$OLD_DIR"
               sed -i "/>$OLD_ID</d" gh_pages/index.html
+            done
+          fi
           
           HISTORY_JSON="$ENV_DIR/last-history/history/history-trend.json"
           if [ -f "$HISTORY_JSON" ]; then
