@@ -26,61 +26,9 @@
     }
   },
   {
-    "buildOrder": 24,
-    "reportUrl": "/QADemo/QA/24/index.html",
-    "reportName": "QA #24",
-    "data": {
-      "failed": 0,
-      "broken": 0,
-      "skipped": 0,
-      "passed": 8,
-      "unknown": 0,
-      "total": 8
-    }
-  },
-  {
     "buildOrder": 23,
     "reportUrl": "/QADemo/QA/23/index.html",
     "reportName": "QA #23",
-    "data": {
-      "failed": 0,
-      "broken": 0,
-      "skipped": 0,
-      "passed": 16,
-      "unknown": 0,
-      "total": 16
-    }
-  },
-  {
-    "buildOrder": 22,
-    "reportUrl": "//QA/22/index.html",
-    "reportName": "QA #22",
-    "data": {
-      "failed": 0,
-      "broken": 2,
-      "skipped": 6,
-      "passed": 8,
-      "unknown": 0,
-      "total": 16
-    }
-  },
-  {
-    "buildOrder": 21,
-    "reportUrl": "21/index.html",
-    "reportName": "QA #21",
-    "data": {
-      "failed": 0,
-      "broken": 2,
-      "skipped": 6,
-      "passed": 8,
-      "unknown": 0,
-      "total": 16
-    }
-  },
-  {
-    "buildOrder": 20,
-    "reportUrl": "20/index.html",
-    "reportName": "QA #20",
     "data": {
       "failed": 0,
       "broken": 0,
