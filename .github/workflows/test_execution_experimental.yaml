@@ -303,7 +303,7 @@ jobs:
             done
           fi
           
-          HISTORY_JSON="$ENV_DIR/last-history/history/history-trend.json"
+          HISTORY_JSON="$ENV_DIR/last-history/history-trend.json"
           if [ -f "$HISTORY_JSON" ]; then
             echo "Trimming history-trend.json..."
             jq '.[-5:]' "$HISTORY_JSON" > tmp.json && mv tmp.json "$HISTORY_JSON"
