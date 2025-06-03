@@ -13,6 +13,19 @@
     "buildOrder": 42
   },
   {
+    "buildOrder": 36,
+    "reportUrl": "/QADemo/QA/36/index.html",
+    "reportName": "QA #36",
+    "data": {
+      "failed": 1,
+      "broken": 0,
+      "skipped": 0,
+      "passed": 7,
+      "unknown": 0,
+      "total": 8
+    }
+  },
+  {
     "buildOrder": 37,
     "reportUrl": "/QADemo/QA/37/index.html",
     "reportName": "QA #37",
