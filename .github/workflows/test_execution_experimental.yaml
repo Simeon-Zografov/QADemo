@@ -284,6 +284,29 @@ jobs:
           fi
           cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history/* gh_pages/${{ steps.vars.outputs.env_name }}/last-history
 
+      - name: Clean old reports
+        run: |
+          ENV_DIR="gh_pages/${ENV_NAME}"
+          REPORT_FOLDERS=($(find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | grep -E '^[0-9]+$' | sort -n))          
+          NUM_REPORTS=${#REPORT_FOLDERS[@]}
+          
+          if (( NUM_REPORTS > 5 )); then
+            NUM_TO_DELETE=$((NUM_REPORTS - 5))
+            echo "Found $NUM_REPORTS reports. Cleaning up $NUM_TO_DELETE oldest..."
+          
+            for (( i=0; i<$NUM_TO_DELETE; i++ )); do
+              OLD_ID="${REPORT_FOLDERS[$i]}"
+              OLD_DIR="$ENV_DIR/$OLD_ID"
+              echo "Deleting old report: $OLD_DIR"
+              rm -rf "$OLD_DIR"
+              sed -i "/>$OLD_ID</d" gh_pages/index.html
+          
+          HISTORY_JSON="$ENV_DIR/last-history/history/history-trend.json"
+          if [ -f "$HISTORY_JSON" ]; then
+            echo "Trimming history-trend.json..."
+            jq '.[-5:]' "$HISTORY_JSON" > tmp.json && mv tmp.json "$HISTORY_JSON"
+          fi
+
       - name: Create environment-level index.html redirect
         run: |
           ENV_NAME=${{ steps.vars.outputs.env_name }}
@@ -370,7 +393,7 @@ jobs:
       
           for ENV_DIR in gh_pages/*/; do
             ENV_NAME=$(basename "$ENV_DIR")
-            [[ "$ENV_NAME" =~ ^(QA|UAT|DEV|STAGING)$ ]] || continue
+            [[ "$ENV_NAME" =~ ^(QA|UAT|DEV|PROD)$ ]] || continue
       
             echo "<h2>Environment: <a href='${ENV_NAME}/index.html'>$ENV_NAME</a></h2>
             <table>
