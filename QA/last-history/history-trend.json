@@ -1,8 +1,8 @@
 [
   {
-    "buildOrder": 35,
-    "reportUrl": "/QADemo/QA/35/index.html",
-    "reportName": "QA #35",
+    "buildOrder": 38,
+    "reportUrl": "/QADemo/QA/38/index.html",
+    "reportName": "QA #38",
     "data": {
       "failed": 0,
       "broken": 2,
@@ -13,9 +13,9 @@
     }
   },
   {
-    "buildOrder": 34,
-    "reportUrl": "/QADemo/QA/34/index.html",
-    "reportName": "QA #34",
+    "buildOrder": 37,
+    "reportUrl": "/QADemo/QA/37/index.html",
+    "reportName": "QA #37",
     "data": {
       "failed": 0,
       "broken": 1,
@@ -26,9 +26,9 @@
     }
   },
   {
-    "buildOrder": 33,
-    "reportUrl": "/QADemo/QA/33/index.html",
-    "reportName": "QA #33",
+    "buildOrder": 36,
+    "reportUrl": "/QADemo/QA/36/index.html",
+    "reportName": "QA #36",
     "data": {
       "failed": 1,
       "broken": 0,
@@ -39,9 +39,9 @@
     }
   },
   {
-    "buildOrder": 31,
-    "reportUrl": "/QADemo/QA/31/index.html",
-    "reportName": "QA #31",
+    "buildOrder": 35,
+    "reportUrl": "/QADemo/QA/35/index.html",
+    "reportName": "QA #35",
     "data": {
       "failed": 0,
       "broken": 1,
@@ -52,9 +52,9 @@
     }
   },
   {
-    "buildOrder": 28,
-    "reportUrl": "/QADemo/QA/28/index.html",
-    "reportName": "QA #28",
+    "buildOrder": 34,
+    "reportUrl": "/QADemo/QA/34/index.html",
+    "reportName": "QA #34",
     "data": {
       "failed": 1,
       "broken": 0,
