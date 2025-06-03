@@ -287,27 +287,47 @@ jobs:
       - name: Clean old reports
         shell: bash
         run: |
+          set -e
           ENV_DIR="gh_pages/${ENV_NAME}"
+
+          echo "Checking for old reports in: $ENV_DIR"
+          if [ ! -d "$ENV_DIR" ]; then
+            echo "Environment directory does not exist. Skipping cleanup."
+            exit 0
+          fi
+
+          echo "Listing numeric subdirectories:"
+          find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | sort
+
+          # Collect numeric folder names
           mapfile -t REPORT_FOLDERS < <(find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | grep -E '^[0-9]+$' | sort -n)
+
           NUM_REPORTS=${#REPORT_FOLDERS[@]}
-          
+          echo "Found $NUM_REPORTS report folders: ${REPORT_FOLDERS[*]}"
+
           if (( NUM_REPORTS > 5 )); then
             NUM_TO_DELETE=$((NUM_REPORTS - 5))
-            echo "Found $NUM_REPORTS reports. Cleaning up $NUM_TO_DELETE oldest..."
-          
+            echo "Need to delete $NUM_TO_DELETE oldest report(s)..."
+
             for (( i=0; i<$NUM_TO_DELETE; i++ )); do
               OLD_ID="${REPORT_FOLDERS[$i]}"
               OLD_DIR="$ENV_DIR/$OLD_ID"
-              echo "Deleting old report: $OLD_DIR"
+              echo "Deleting report folder: $OLD_DIR"
               rm -rf "$OLD_DIR"
+
+              echo "Removing entry from landing page: $OLD_ID"
               sed -i "/>${OLD_ID}</d" gh_pages/index.html
             done
+          else
+            echo "Nothing to delete. Only $NUM_REPORTS reports found."
           fi
-          
+
           HISTORY_JSON="$ENV_DIR/last-history/history-trend.json"
           if [ -f "$HISTORY_JSON" ]; then
-            echo "Trimming history-trend.json..."
+            echo "Trimming history-trend.json to 5 entries..."
             jq '.[-5:]' "$HISTORY_JSON" > tmp.json && mv tmp.json "$HISTORY_JSON"
+          else
+            echo "No history-trend.json found. Skipping."
           fi
 
       - name: Create environment-level index.html redirect
