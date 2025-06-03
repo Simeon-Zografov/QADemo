@@ -285,9 +285,9 @@ jobs:
           HISTORY_JSON="$ENV_DIR/last-history/history-trend.json"
           if [ -f "$HISTORY_JSON" ]; then
             echo "Trimming history-trend.json to 5 entries..."
-            jq 'sort_by(.buildOrder | tonumber) | .[-5:]' "$HISTORY_JSON" > tmp.json && mv tmp.json "$HISTORY_JSON"
-            jq "sort_by(.buildOrder) | reverse" tmp.json > "$HISTORY_JSON"
-            rm tmp.json
+            jq 'sort_by(.buildOrder | tonumber) | .[-5:]' "$HISTORY_JSON" > tmp_trimmed.json
+            jq 'sort_by(.buildOrder | tonumber) | reverse' tmp_trimmed.json > "$HISTORY_JSON"
+            rm tmp_trimmed.json
           else
             echo "No history-trend.json found. Skipping."
           fi
