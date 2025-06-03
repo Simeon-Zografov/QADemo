@@ -21,7 +21,7 @@ class TestLogin(BaseClass):
 
     @severity(severity_level.NORMAL)
     @allure.feature('Login')
-    @allure.title("Unsuccessfully login with email: {email} and password: {password}")
+    @allure.title("Unsuccessfully login with username: {username} and password: {password}")
     @pytest.mark.dependency(depends=["test_1"])
     @pytest.mark.parametrize('username,password,error', [
         (BaseClass.username[:-1], BaseClass.password, "Your username is invalid!"),
