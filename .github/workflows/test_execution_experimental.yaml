@@ -281,16 +281,22 @@ jobs:
           else
             echo "Nothing to delete. Only $NUM_REPORTS reports found."
           fi
-
+          
+          HISTORY_TREND_FILE="$ENV_DIR/last-history/history-trend.json"
+          CATEGORIES_TREND_FILE="$ENV_DIR/last-history/categories-trend.json"
+          DURATION_TREND_FILE="$ENV_DIR/last-history/duration-trend.json"
+          RETRY_TREND_FILE="$ENV_DIR/last-history/retry-trend.json"
           HISTORY_JSON="$ENV_DIR/last-history/history-trend.json"
-          if [ -f "$HISTORY_JSON" ]; then
-            echo "Trimming history-trend.json to 5 entries..."
-            jq 'sort_by(.buildOrder | tonumber) | .[-4:]' "$HISTORY_JSON" > tmp_trimmed.json
-            jq 'sort_by(.buildOrder | tonumber) | reverse' tmp_trimmed.json > "$HISTORY_JSON"
-            rm tmp_trimmed.json
-          else
-            echo "No history-trend.json found. Skipping."
-          fi
+          for FILE in "$HISTORY_TREND_FILE" "$CATEGORIES_TREND_FILE" "$DURATION_TREND_FILE" "$RETRY_TREND_FILE"; do
+            if [ -f "$FILE" ]; then
+              echo "Trimming $FILE to 5 entries..."
+              jq 'sort_by(.buildOrder | tonumber) | .[-4:]' "$FILE" > tmp_trimmed.json
+              jq 'sort_by(.buildOrder | tonumber) | reverse' tmp_trimmed.json > "$FILE"
+              rm tmp_trimmed.json
+            else
+              echo "File not found: $FILE. Skipping."
+            fi
+          done
 
       - name: Generate Allure metadata files
         run: |
@@ -330,23 +336,28 @@ jobs:
           mv gh_pages/_tmp-report/* gh_pages/${{ steps.vars.outputs.report_path }}/
           rm -rf gh_pages/_tmp-report
 
-      - name: Patch history-trend.json with report metadata
+      - name: Patch json files with report metadata
         run: |
-          FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/history-trend.json"
+          HISTORY_TREND_FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/history-trend.json"
+          CATEGORIES_TREND_FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/categories-trend.json"
+          DURATION_TREND_FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/duration-trend.json"
+          RETRY_TREND_FILE="gh_pages/${{ steps.vars.outputs.report_path }}/history/retry-trend.json"
           REPORT_ID=${{ steps.vars.outputs.report_id }}
           ENV_NAME=${{ steps.vars.outputs.env_name }}
           REPO_NAME="${{ github.event.repository.name }}"
           REPORT_NAME="${ENV_NAME} #${REPORT_ID}"
           REPORT_URL="/${REPO_NAME}/${ENV_NAME}/${REPORT_ID}/index.html"
-      
-          if [ -f "$FILE" ]; then
-            jq --arg name "$REPORT_NAME" \
-               --arg url "$REPORT_URL" \
-               --argjson order "$REPORT_ID" \
-               '.[0] += {reportName: $name, reportUrl: $url, buildOrder: $order}' "$FILE" > tmp.json && mv tmp.json "$FILE"
-          else
-            echo "No history-trend.json found to patch."
-          fi
+        
+          for FILE in "$HISTORY_TREND_FILE" "$CATEGORIES_TREND_FILE" "$DURATION_TREND_FILE" "$RETRY_TREND_FILE"; do
+            if [ -f "$FILE" ]; then
+              jq --arg name "$REPORT_NAME" \
+                 --arg url "$REPORT_URL" \
+                 --argjson order "$REPORT_ID" \
+                 '.[0] += {reportName: $name, reportUrl: $url, buildOrder: $order}' "$FILE" > tmp.json && mv tmp.json "$FILE"
+            else
+              echo "File not found: $FILE. Skipping."
+            fi
+          done
 
       - name: Save last history
         run: |
