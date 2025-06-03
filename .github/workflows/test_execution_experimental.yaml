@@ -296,7 +296,7 @@ jobs:
         run: |
           ENV_NAME="${{ steps.vars.outputs.env_name }}"
           REPORT_ID="${{ steps.vars.outputs.report_id }}"
-          ENV_DIR="gh_pages/${ENV_NAME}"  
+          ENV_DIR="gh_pages/${ENV_NAME}/${REPORT_ID}"  
           
           echo "Environment=$ENV_NAME" > $ENV_DIR/allure-results/environment.properties
       
