@@ -63,18 +63,5 @@
       "unknown": 0,
       "total": 8
     }
-  },
-  {
-    "buildOrder": 23,
-    "reportUrl": "/QADemo/QA/23/index.html",
-    "reportName": "QA #23",
-    "data": {
-      "failed": 0,
-      "broken": 0,
-      "skipped": 0,
-      "passed": 16,
-      "unknown": 0,
-      "total": 16
-    }
   }
 ]
