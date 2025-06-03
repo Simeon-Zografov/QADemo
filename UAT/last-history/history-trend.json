@@ -1,0 +1,15 @@
+[
+  {
+    "data": {
+      "failed": 0,
+      "broken": 1,
+      "skipped": 1,
+      "passed": 6,
+      "unknown": 0,
+      "total": 8
+    },
+    "reportName": "UAT #49",
+    "reportUrl": "/QADemo/UAT/49/index.html",
+    "buildOrder": 49
+  }
+]
