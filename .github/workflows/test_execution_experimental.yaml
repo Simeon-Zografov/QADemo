@@ -285,9 +285,10 @@ jobs:
           cp -r gh_pages/${{ steps.vars.outputs.report_path }}/history/* gh_pages/${{ steps.vars.outputs.env_name }}/last-history
 
       - name: Clean old reports
+        shell: bash
         run: |
           ENV_DIR="gh_pages/${ENV_NAME}"
-          REPORT_FOLDERS=($(find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | grep -E '^[0-9]+$' | sort -n))          
+          mapfile -t REPORT_FOLDERS < <(find "$ENV_DIR" -mindepth 1 -maxdepth 1 -type d -printf "%f\n" | grep -E '^[0-9]+$' | sort -n)
           NUM_REPORTS=${#REPORT_FOLDERS[@]}
           
           if (( NUM_REPORTS > 5 )); then
@@ -299,7 +300,7 @@ jobs:
               OLD_DIR="$ENV_DIR/$OLD_ID"
               echo "Deleting old report: $OLD_DIR"
               rm -rf "$OLD_DIR"
-              sed -i "/>$OLD_ID</d" gh_pages/index.html
+              sed -i "/>${OLD_ID}</d" gh_pages/index.html
             done
           fi
           
