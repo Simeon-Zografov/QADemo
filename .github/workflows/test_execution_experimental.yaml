@@ -292,6 +292,26 @@ jobs:
             echo "No history-trend.json found. Skipping."
           fi
 
+      - name: Generate Allure metadata files
+        run: |
+          ENV_NAME="${{ steps.vars.outputs.env_name }}"
+          REPORT_ID="${{ steps.vars.outputs.report_id }}"
+          ENV_DIR="gh_pages/${ENV_NAME}"  
+          
+          echo "Environment=$ENV_NAME" > $ENV_DIR/allure-results/environment.properties
+      
+          cat <<EOF > $ENV_DIR/allure-results/executor.json
+          {
+            "name": "GitHub Actions",
+            "type": "github",
+            "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "buildOrder": ${REPORT_ID},
+            "buildName": "${{ github.workflow }}",
+            "buildUrl": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+            "reportUrl": "https://${{ github.repository_owner }}.github.io/QADemo/${ENV_NAME}/${REPORT_ID}/index.html"
+          }
+          EOF
+
       - name: Retrieve existing history
         run: |
           if [ -d gh_pages/${{ steps.vars.outputs.env_name }}/last-history ]; then
