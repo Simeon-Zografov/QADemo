@@ -196,7 +196,7 @@ jobs:
     steps:
 
       - name: Run report publish action
-        uses: Simeon-Zografov/build-allure-report-action/.github/actions/publish-report@v1
+        uses: Simeon-Zografov/build-allure-report-action/.github/actions/publish-report@main
         with:
           branch: gh_pages
           env_name: ${{ github.event.inputs.environment }}
