@@ -83,33 +83,42 @@ jobs:
           fi
         working-directory: .
 
-      - name: Commit and push individual report to gh_pages
+      - name: Push results
+        uses: Simeon-Zografov/build-allure-report-action/.github/actions/push-individual-report@main
         if: always()
         continue-on-error: true
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b gh_pages || git checkout gh_pages
-          git pull origin gh_pages --rebase
-          mkdir -p results-chrome
-          cp -r allure-results/* results-chrome/
-          git add results-chrome
-          git commit -m "Add report for chrome"
-          n=0
-          until [ $n -ge 5 ]; do
-            git pull origin gh_pages --rebase
-            git push origin gh_pages && break
-            n=$((n+1))
-            echo "Push failed, retrying in 3 seconds..."
-            sleep 3
-          done
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          browser: ${{ env.BROWSERS }}
+          number-of-browsers: 2
 
-          if [ $n -ge 3 ]; then
-            echo "Failed to push after 3 attempts."
-            exit 1
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Commit and push individual report to gh_pages
+#        if: always()
+#        continue-on-error: true
+#        run: |
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+#          git checkout -b gh_pages || git checkout gh_pages
+#          git pull origin gh_pages --rebase
+#          mkdir -p results-chrome
+#          cp -r allure-results/* results-chrome/
+#          git add results-chrome
+#          git commit -m "Add report for chrome"
+#          n=0
+#          until [ $n -ge 5 ]; do
+#            git pull origin gh_pages --rebase
+#            git push origin gh_pages && break
+#            n=$((n+1))
+#            echo "Push failed, retrying in 3 seconds..."
+#            sleep 3
+#          done
+#
+#          if [ $n -ge 3 ]; then
+#            echo "Failed to push after 3 attempts."
+#            exit 1
+#          fi
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   edge-test:
     name: Run Edge tests
@@ -160,33 +169,42 @@ jobs:
           fi
         working-directory: .
 
-      - name: Commit and push individual report to gh_pages
+      - name: Push results
+        uses: Simeon-Zografov/build-allure-report-action/.github/actions/push-individual-report@main
         if: always()
         continue-on-error: true
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout -b gh_pages || git checkout gh_pages
-          git pull origin gh_pages --rebase
-          mkdir -p results-edge
-          cp -r allure-results/* results-edge/
-          git add results-edge
-          git commit -m "Add report for edge"
-          n=0
-          until [ $n -ge 3 ]; do
-            git pull origin gh_pages --rebase
-            git push origin gh_pages && break
-            n=$((n+1))
-            echo "Push failed, retrying in 3 seconds..."
-            sleep 3
-          done
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          browser: ${{ env.BROWSERS }}
+          number-of-browsers: 2
 
-          if [ $n -ge 3 ]; then
-            echo "Failed to push after 3 attempts."
-            exit 1
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Commit and push individual report to gh_pages
+#        if: always()
+#        continue-on-error: true
+#        run: |
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+#          git checkout -b gh_pages || git checkout gh_pages
+#          git pull origin gh_pages --rebase
+#          mkdir -p results-edge
+#          cp -r allure-results/* results-edge/
+#          git add results-edge
+#          git commit -m "Add report for edge"
+#          n=0
+#          until [ $n -ge 3 ]; do
+#            git pull origin gh_pages --rebase
+#            git push origin gh_pages && break
+#            n=$((n+1))
+#            echo "Push failed, retrying in 3 seconds..."
+#            sleep 3
+#          done
+#
+#          if [ $n -ge 3 ]; then
+#            echo "Failed to push after 3 attempts."
+#            exit 1
+#          fi
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   aggregate:
     name: Generate report
