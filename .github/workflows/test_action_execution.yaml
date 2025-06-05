@@ -165,7 +165,6 @@ jobs:
           report_id: ${{ github.run_number }}
           run_id: ${{ github.run_id }}
           run_number: ${{ github.run_number }}
-          repo: ${{ github.repository }}
           keep_reports: 5
 
       - name: Publish test report
