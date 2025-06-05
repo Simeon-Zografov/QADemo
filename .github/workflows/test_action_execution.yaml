@@ -163,8 +163,6 @@ jobs:
           branch: gh_pages
           env_name: ${{ github.event.inputs.environment }}
           report_id: ${{ github.run_number }}
-          run_id: ${{ github.run_id }}
-          run_number: ${{ github.run_number }}
           keep_reports: 5
 
       - name: Publish test report
