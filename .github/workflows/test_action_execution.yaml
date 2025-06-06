@@ -1,16 +1,6 @@
 name: Run Selenium Tests and publish report experimental
 
 on:
-  workflow_call:
-    inputs:
-      chrome:
-        type: boolean
-      edge:
-        type: boolean
-      test_options:
-        type: string
-      environment:
-        type: string
   workflow_dispatch:
     inputs:
       chrome:
