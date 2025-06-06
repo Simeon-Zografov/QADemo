@@ -1,7 +1,8 @@
 name: Scheduled UAT execution
 
 on:
-  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 0'
 
 jobs:
   call-test:
