@@ -1,4 +1,4 @@
-name: Scheduled QA execution
+name: Scheduled UAT execution
 
 on:
   workflow_dispatch:
