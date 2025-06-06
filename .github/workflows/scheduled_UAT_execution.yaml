@@ -8,7 +8,7 @@ jobs:
   call-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger QA API execution
+      - name: Trigger UAT API execution
         run: |
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
