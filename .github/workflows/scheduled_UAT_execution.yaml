@@ -1,0 +1,13 @@
+name: Scheduled QA execution
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-test:
+    uses: ./.github/workflows/test_action_execution.yaml
+    with:
+      chrome: true
+      edge: true
+      test_options: 'All'
+      environment: 'UAT'
