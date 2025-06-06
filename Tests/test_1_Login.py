@@ -16,6 +16,7 @@ class TestLogin(BaseClass):
     def test_1(self, driver):
         login_obj = Login(driver)
         driver.get(self.url)
+        print(BaseClass.cur_env)
         with check, allure.step("Check the page title"):
             assert login_obj.is_login_title_visible()
 
