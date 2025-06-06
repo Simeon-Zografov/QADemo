@@ -1,6 +1,7 @@
 name: Run Selenium Tests and publish report experimental
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       chrome:
