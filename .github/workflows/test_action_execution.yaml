@@ -7,7 +7,7 @@ on:
         type: boolean
       edge:
         type: boolean
-      test-options:
+      test_options:
         type: string
       environment:
         type: string
